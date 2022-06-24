@@ -21,12 +21,11 @@ from collections import defaultdict
 
 from anki.notes import Note
 from aqt import mw
-from aqt.addcards import AddCards
 from aqt.editcurrent import EditCurrent
 from aqt.utils import getText, showInfo, showWarning, tooltip
 
 from .util import fixImages, getField, setField
-
+from .addcards import AddCards
 
 SCHEDULE_EXTRACT = 0
 
@@ -145,17 +144,10 @@ class TextManager:
             EditCurrent(mw)
 
     def _editExtract(self, note, did, settings):
-        def onAdd():
-            addCards.rejected.disconnect(self.undo)
-            addCards.reject()
-
-        addCards = AddCards(mw)
-        addCards.rejected.connect(self.undo)
-        addCards.addButton.clicked.connect(onAdd)
+        addCards = AddCards(self.undo, mw)
         addCards.editor.setNote(note, focusTo=0)
-        deckName = mw.col.decks.get(did)['name']
-        addCards.deckChooser.setDeckName(deckName)
-        addCards.modelChooser.models.setText(settings['modelName'])
+        addCards.deck_chooser.selected_deck_id = did
+        addCards.notetype_chooser.selected_notetype_id = mw.col.models.id_for_name(settings['modelName'])
         return True
 
     def _getTitle(self, note, did, title, settings):
