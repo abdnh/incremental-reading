@@ -52,6 +52,9 @@ class TextManager:
         self.save()
 
     def extract(self, settings=None):
+        if mw.state != 'review':
+            return
+
         if not settings:
             settings = self.settings
 
