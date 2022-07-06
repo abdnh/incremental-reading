@@ -5,3 +5,6 @@
 .ropeproject/
 __pycache__
 meta.json
+venv/
+ankidata/
+anki-misc/
